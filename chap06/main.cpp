@@ -174,13 +174,173 @@ void linkString(){
 } 
 
 /*访问字符*/ 
+void accessString() {
+	string text;
+	cout<<endl
+		<<"Enter a line of text: "
+		<<endl;
+	getline(cin,text);
+	
+	int vowels = 0;
+	int consonants = 0;
+	for(int i = 0;i<text.length();i++){
+		if(isalpha(text[i])){
+			switch(tolower(text[i])){
+				case 'a':case 'e':case 'i':
+				case 'o':case 'u':
+					vowels++;
+					break;
+				default:
+					consonants++;
+			}
+		}
+	}
+	
+	cout<<"Your input contained "
+		<<vowels<<" vowels and "
+		<<consonants<<" consonants."
+		<<endl;
+}
+
+/*比较字符串*/
+void compareString(){
+	const int max_names = 6;
+	string names[max_names];
+	int count = 0;
+	char answer = 0;
+	
+	do{
+		cout<<"Enter a name: ";
+		cin>>names[count++];
+		
+		cout<<"Do you want to enter another name(y/n)? ";
+		cin>>answer;
+	}while(count<max_names&&tolower(answer)=='y');
+	
+	if(count == max_names){
+		cout<<endl
+			<<"Maximum name count reached."
+			<<endl;
+	}
+	int index_of_max = 0;
+	int index_of_min = 0;
+	for(int i = 1;i<count;i++){
+		if(names[i]>names[index_of_max]){
+			index_of_max = i;
+		}else if(names[i]<names[index_of_min]){
+		 	index_of_min = i;
+		}
+	}
+	cout<<endl
+		<<"The minmum name is "<<names[index_of_min]
+		<<endl;
+	cout<<endl
+		<<"The maximum name is "<<names[index_of_max]
+		<<endl;
+}
+
+/*搜索字符串*/
+void searchString(){
+	string text = "Smith,where Jones had had \" had had \",had had \"had\"."
+				"\n \" Had had \" had had teh examiners' aproval.";
+	string word = "had";
+	
+	cout<<endl
+		<<"The string is: "
+		<<endl
+		<<text
+		<<endl;
+	int count = 0;
+	for(int index = 0;(index=text.find(word,index))!=string::npos;index+=word.length(),count++);
+	cout<<"Your text contained "	
+		<<count<<" occurrences of \""
+		<<word<<"\"."
+		<<endl;
+}
+
+/*查找给定字符集合中的字符*/
+void searchCharSet(){
+	string text = "Smith,where Jones had had \" had had\",had had \"had\"."
+					" \"Had had\" had had the examiners' approval.";
+	string separators = " ,.\"";
+	// 查找第一个单词开始的位置 
+	size_t start = text.find_first_not_of(separators);
+	size_t end = 0;
+	// 单词计数 
+	int word_count = 0;
+	while(start!=string::npos){
+		// 查找当前单词结尾的索引 
+		end = text.find_first_of(separators,start+1);
+		// 若到尾则赋值最后一个索引 
+		if(end == string::npos){
+			end = text.length();
+		}
+		// 输出截取的字符串 
+		cout<<text.substr(start,end-start)// 从start开始截取end-start 个 
+			<<endl;
+		// 单词数累加 
+		word_count++;
+		// 从end开始继续寻找下一个单词的开始位置 
+		start = text.find_first_not_of(separators,end+1);
+	}
+	// 输出统计结果 
+	cout<<"Your string contained "
+		<<word_count<<" words."
+		<<endl;
+}
+
+/*替换子字符串*/
+void replaceSubStr(){
+	string text;
+	cout<<"Enter a string terminated by #:"<<endl;
+	getline(cin,text,'#');
+	
+	string word;
+	cout<<endl
+		<<"Enter the word to be replaced: ";
+	cin>>word;
+	
+	string replacement;
+	cout<<endl
+		<<"Enter the replacement word: " ;
+	cin>>replacement;
+	
+	if(word == replacement){
+		cout<<endl
+			<<"The word and its replacement are the same."
+			<<endl
+			<<"Operation aborted."
+			<<endl;
+		exit(1);
+	}
+	
+	size_t start = text.find(word);
+	
+	while(start!=string::npos) {
+		// 替换字符 
+		text.replace(start,word.length(),replacement);
+		// 继续寻找start+replacement.length()之后的下一个单词 
+		start = text.find(word,start+replacement.length());
+	}
+	
+	// 输出结果
+	cout<<endl
+		<<"Your string is now: " 
+		<<endl
+		<<text<<endl;		
+}
 
 int main(int argc, char** argv) {
 //	useArray();
 //	initArray();
 //	getArrayLength();
-//	countVowels(); 
+//	countVowels(); s
 //	useCharArray();
-	linkString();
+//	linkString();
+//	accessString();
+//	compareString();
+//	searchString();
+//	searchCharSet(); 
+	replaceSubStr();
 	return 0;
 }
