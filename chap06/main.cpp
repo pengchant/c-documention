@@ -173,6 +173,8 @@ void linkString(){
 		<<endl;		
 } 
 
+/*·ÃÎÊ×Ö·û*/ 
+
 int main(int argc, char** argv) {
 //	useArray();
 //	initArray();
