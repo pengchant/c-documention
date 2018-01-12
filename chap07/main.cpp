@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 #include <cctype>
 
 /*指针*/ 
@@ -169,9 +170,39 @@ void sortChart(){
 			cout<<endl;
 			words_in_line = 0;
 		}
-	}
+		
+	} 	 
+}
+
+/*把数组名用作指针*/
+void useArrayNameAsPointer(){
+	const int max = 100;
+	long primes[max] = {2,3,5};
+	int count = 3;// 计数器让其<100,防止数组越界 
+	long trial = 5;// 当前最大的素数 
+	bool isprime = true;// 标记是否为素数(默认为true) 
 	
-		 
+	do{
+		trial += 2;
+		int i = 0;
+		do{
+			// 求trial+2之后与前面求余是否>0(>0表示素数=>isprime=true) 
+			isprime = trial %*(primes+i)>0;				
+		}while(++i<count&&isprime);// 循环的条件为没有超过上限，且isprime==true 
+		if(isprime){// 判断是否为素数，若为素数则加入数组中，count同时累加 
+			*(primes+count++) = trial;
+		}
+	}while(count<max);// 循环条件为数组未越界 
+	
+	// 输出结果
+	for(int i = 0;i<max;i++){
+		if(i%5==0){// 超过五个换行处理 
+			cout<<endl;
+		}
+		// 控制行间距，使用*(primes+i)的形式访问数组中的元素 
+		cout<<setw(10)<<*(primes+i);
+	}	 
+	cout<<endl;
 }
 
 int main(int argc, char** argv) {
@@ -179,6 +210,7 @@ int main(int argc, char** argv) {
 //	usePointer();
 //	luckstar();
 //	usePointArray();
-	sortChart();
+//	sortChart();
+	useArrayNameAsPointer();
 	return 0;
 }
