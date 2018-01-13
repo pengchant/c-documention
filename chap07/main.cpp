@@ -205,12 +205,174 @@ void useArrayNameAsPointer(){
 	cout<<endl;
 }
 
+/*对多维数组使用指针表示法*/ 
+void useMultiArrayPointer(){
+	const int table = 12;
+	long values[table][table] = {0};
+	
+	for(int i = 0;i<table;i++){
+		for(int j = 0;j<table;j++){
+			*(*(values+i)+j) = (i+1)*(j+1);
+		}
+	}
+	
+	// 输出表头
+	cout<<"     |" ;
+	for(int i = 1;i<=table;i++){
+		cout<<" "<<setw(3)<<i<<" |" ;
+	} 
+	cout<<endl;
+	
+	// 创建分割线
+	for(int i = 0;i<=table;i++){
+		cout<<"------";
+	} 
+	cout<<endl;
+	
+	// 输出数据
+	for(int i = 0;i<table;i++){
+		cout<<" " <<setw(3)<<i+1<<" |";
+		// 输出每行值
+		for(int j = 0;j<table;j++){
+			cout<<" "<<setw(3)<<values[i][j]<<" |";
+		} 
+		cout<<endl;
+	} 
+}
+
+/*使用自由存储区*/
+void useFreeMemory(){
+	int max = 0;
+	int count = 3;
+	long trial= 5;
+	bool isprime = true;
+	
+	cout<<endl
+		<<"Enter the number of plrimes you would like:";
+	cin>>max;
+	
+	long* primes = new long[max];
+	*primes = 2;
+	*(primes+1) = 3;
+	*(primes+2) = 5;
+	
+	do{
+		trial += 2;
+		int i = 0; 
+		do{
+			isprime = trial % *(primes+i)>0;
+		}while(++i<count&&isprime);
+		if(isprime){
+			*(primes+count++) = trial;
+		}
+	}while(count<max);
+	
+	// 输出结果
+	for(int i = 0;i<max;i++){
+		if(i%5==0){
+			cout<<endl;
+		}
+		cout<<setw(10)<<*(primes+i);
+	} 
+	cout<<endl;
+	// 删除内存空间
+	delete []  primes;
+	primes = 0;	
+}
+
+/*给字符串排序*/
+void sortString(){	
+	string text; 
+	const string separators = " ,.\"\n";
+	// 提示用户输入 
+	cout<<endl
+		<<"Enter a string terminated by #:"
+		<<endl;
+	getline(cin,text,'#'); 
+	
+	// 创建指向单词的指针数组，切割句子的单词 
+	size_t start = text.find_first_not_of(separators);
+	size_t end = 0;
+	int word_count = 0;// 单词计数   
+	while(start!=string::npos){
+		end = text.find_first_of(separators,start+1);
+		if(end==string::npos){
+			end = text.length();
+		}
+	    word_count++;
+		start = text.find_first_not_of(separators,end+1);			 	
+	}
+	
+	// 指向单词的指针数组,即数组的数组  
+	start = text.find_first_not_of(separators); 	
+	string** pwords = new string*[word_count];
+	int index = 0; 
+	while(start!=string::npos){
+		end = text.find_first_of(separators,start+1);
+		if(end==string::npos){
+			end = text.length();
+		}
+		pwords[index++] = new string(text.substr(start,end-start));
+		start = text.find_first_not_of(separators,end+1);			 	
+	}
+	
+	
+	cout<<endl
+		<<"Total: "
+		<<word_count
+		<<endl;
+		
+	// 对单词进行排序(简单选择排序) 
+	int lowest = 0;
+	for(int j = 0;j<word_count-1;j++){
+		lowest = j;
+		for(int i = j+1;i<word_count;i++){
+			if(*pwords[i]<*pwords[lowest]){
+				lowest = i;
+			}
+		}
+		// 如果找到最小的就开始交换(交换位置)
+		if(lowest!=j){
+			string* ptemp = pwords[j];
+			pwords[j] = pwords[lowest];
+			pwords[lowest] = ptemp;
+		}				
+	} 
+	
+	// 格式化输出(规则：相同首字母在一行，不同则换行，每行超过6个继续换行) 
+	char ch = (*pwords[0])[0];
+	int words_in_line = 0;
+	for(int i = 0;i<word_count;i++){
+		// 如果出现不一样的首字母，换行,且标记新的首字母，将行字母数赋值为0 
+		if(ch!=(*pwords[i])[0]){
+			cout<<endl;
+			ch = (*pwords[i])[0];
+			words_in_line = 0;
+		}
+		cout<<*pwords[i]<<" ";
+		// 如果每行有6个字母换行 
+		if(++words_in_line==6){
+			cout<<endl;
+			words_in_line = 0;
+		}
+	}	
+	
+	// 释放内存
+	for(int i = 0;i<word_count;i++){
+		delete pwords[i];
+	} 
+	delete [] pwords;	
+}
+
 int main(int argc, char** argv) {
 //	usejianjie();
 //	usePointer();
 //	luckstar();
 //	usePointArray();
 //	sortChart();
-	useArrayNameAsPointer();
+//	useArrayNameAsPointer();
+//	useMultiArrayPointer(); 
+//	useFreeMemory();
+	sortString();
 	return 0;
 }
