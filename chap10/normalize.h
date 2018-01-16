@@ -7,7 +7,7 @@ namespace tcompare{
 		for(int i = 0;i<size;i++){
 			newData[i] = static_cast<Tnormalized>(data[i] - minValue);
 		} 
-		Tormalized maxValue = max(data,size);
+		Tnormalized maxValue = max(data,size);
 		for(int i = 0;i<size;i++){
 			newData[i] /= maxValue;
 		}
