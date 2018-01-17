@@ -8,7 +8,8 @@ Box::Box(){
 	length = width = height = 1.0;// д╛хож╣ 
 }
 
-Box::Box(double lengthValue,double widthValue,double heightValue){
+Box::Box(double lengthValue,double widthValue,double heightValue):
+	length(lengthValue),width(widthValue),height(heightValue){
 	cout<<"Box constructor called."<<endl;
 	length = lengthValue;
 	width = widthValue;
