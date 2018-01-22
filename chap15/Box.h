@@ -2,9 +2,13 @@
 #define BOX_H
 class Box{
 	public:
-		Box(double lv = 1.0,double wv = 1.0,double hv = 1.0);
+		Box(); 
+		~Box(); 
+		// Box的副本构造函数
+		Box(const Box& aBox);
+		Box(double lv,double wv,double hv);
 		double volume() const;
-	private:
+	protected:
 		double length;
 		double width;
 		double height;
